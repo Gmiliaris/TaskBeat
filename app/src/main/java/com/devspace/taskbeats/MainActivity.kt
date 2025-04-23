@@ -2,10 +2,22 @@ package com.devspace.taskbeats
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 
 class MainActivity : AppCompatActivity() {
+
+    private val db by lazy { Room.databaseBuilder(
+        applicationContext,
+        TaskBeatDataBase::class.java,
+        "database-task-beat"
+        ).build()
+    }
+
+    private val categoryDao by lazy {
+        db.getCategoryDao()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,6 +54,19 @@ class MainActivity : AppCompatActivity() {
         rvTask.adapter = taskAdapter
         taskAdapter.submitList(tasks)
     }
+
+    private fun insertDefaultCategory() {
+        val categoriesEntity = categories.map {
+            CategoryEntity(
+                name = it.name,
+                isSelected = it.isSelected
+            )
+        }
+
+
+        categoryDao.insertAll(categoriesEntity)
+    }
+
 }
 
 val categories = listOf(
