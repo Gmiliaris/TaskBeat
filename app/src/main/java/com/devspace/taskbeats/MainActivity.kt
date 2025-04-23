@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         val taskAdapter = TaskListAdapter()
         val categoryAdapter = CategoryListAdapter()
+
+        insertDefaultCategory()
 
         categoryAdapter.setOnClickListener { selected ->
             val categoryTemp = categories.map { item ->
@@ -63,11 +68,12 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-
+        GlobalScope.launch(Dispatchers.IO) {
         categoryDao.insertAll(categoriesEntity)
+        }
     }
-
 }
+
 
 val categories = listOf(
     CategoryUiData(
