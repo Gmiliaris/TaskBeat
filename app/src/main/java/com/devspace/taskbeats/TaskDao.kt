@@ -7,12 +7,15 @@ import androidx.room.Query
 
 
 @Dao
-interface CategoryDao{
+interface TaskDao {
 
-    @Query("SELECT * FROM categoryentity")
-    fun getAllCategories(): List<CategoryEntity>
+
+    @Query("SELECT * FROM taskentity")
+    fun getAll(): List<TaskEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(categoryEntities: List<CategoryEntity>)
+    fun insertAll(taskEntities: List<TaskEntity>)
 
+    @Query("DELETE FROM taskentity")
+    fun deleteAll()
 }
